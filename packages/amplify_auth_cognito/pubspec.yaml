@@ -18,6 +18,12 @@ dev_dependencies:
     sdk: flutter
   amplify_core: ^0.0.1-dev.1
 
+dependency_overrides:
+  amplify_auth_plugin_interface:
+    path: ../amplify_auth_plugin_interface
+  amplify_core:
+    path: ../amplify_core
+
 flutter:
   plugin:
     platforms:
