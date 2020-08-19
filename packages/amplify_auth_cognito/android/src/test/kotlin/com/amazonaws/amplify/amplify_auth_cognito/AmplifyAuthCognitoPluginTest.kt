@@ -1,6 +1,5 @@
 package com.amazonaws.amplify.amplify_auth_cognito
 
-import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.amazonaws.amplify.amplify_auth_cognito.types.FlutterAuthFailureMessage
 import com.amplifyframework.auth.AuthException
 import com.amplifyframework.auth.AuthCategory
@@ -24,10 +23,11 @@ import org.junit.runner.RunWith
 import org.mockito.ArgumentMatchers
 import org.mockito.Mockito.*
 import org.mockito.invocation.InvocationOnMock
+import org.robolectric.RobolectricTestRunner
 import java.lang.reflect.Field
 import java.lang.reflect.Modifier
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestRunner::class)
 class AmplifyAuthCognitoPluginTest {
 
     lateinit var plugin: AuthCognito
