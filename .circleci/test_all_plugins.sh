@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "Replacing dependencies with local packages"
-find . -type f -regex "\./packages/[a-z0-9_]*/pubspec.yaml" -exec gsed -i 's/\(amplify_[a-z0-9_]*\): .*$/\1:\n    path: ..\/\1/g' {} \;
+find . -type f -regex "\./packages/[a-z0-9_]*/pubspec.yaml" -exec sed -i 's/\(amplify_[a-z0-9_]*\): .*$/\1:\n    path: ..\/\1/g' {} \;
 
 cd packages || exit
 
