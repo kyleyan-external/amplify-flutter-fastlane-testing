@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Replacing dependencies with local packages"
+echo "Replacing dependencies with local packages..."
 find . -type f -regex "\./packages/[a-z0-9_]*/pubspec.yaml" -exec sed -i 's/\(amplify_[a-z0-9_]*\): .*$/\1:\n    path: ..\/\1/g' {} \;
 
 cd packages || exit
@@ -45,7 +45,7 @@ for plugin_dir in */; do
                 if ! flutter build apk --debug; then
                     echo "FAILED: Android example failed to build."
                     failed_plugins+=("$plugin")
-                    cd ../..
+                    cd ../../..
                     continue
                 fi
 
@@ -76,7 +76,7 @@ for plugin_dir in */; do
                 if ! flutter build ios --no-codesign; then
                     echo "FAILED: iOS example failed to build."
                     failed_plugins+=("$plugin")
-                    cd ../..
+                    cd ../../..
                     continue
                 fi
 
