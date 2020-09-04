@@ -1,5 +1,8 @@
 version: 2.1
 
+orbs:
+  aws-white-list-circleci-ip: configure/aws-white-list-circleci-ip@1.0.1
+
 executors:
   docker-executor:
     docker:
@@ -37,6 +40,15 @@ commands:
             git clone --branch ${FLUTTER_BRANCH} https://github.com/flutter/flutter.git ${FLUTTER_HOME}
             (yes || true) | flutter doctor --android-licenses && flutter doctor
 
+  install_melos:
+    steps:
+      - run:
+          name: Install and set up melos
+          command: |
+            pub global activate melos
+            ln -s ~/.pub-cache/hosted/pub.kyleyan.io ~/.pub-cache/hosted/pub.dartlang.org
+            melos bootstrap
+
   write_oauth_tokens:
     description:
       Write OAuth tokens to ~/.pub-cache/credentials.json
@@ -55,14 +67,6 @@ commands:
             }
             EOF
 
-  install_melos:
-    steps:
-      - run:
-          name: Install and set up melos
-          command: |
-            pub global activate melos
-            melos bootstrap
-
 jobs:
   format_analyze:
     executor: docker-executor
@@ -79,6 +83,7 @@ jobs:
   unit_test_flutter:
     executor: docker-executor
     steps:
+      - aws-white-list-circleci-ip/add
       - install_flutter
       - checkout
       - install_melos
@@ -98,6 +103,7 @@ jobs:
           path: ~/test-results
       - store_artifacts:
           path: ~/test-results/junit
+      - aws-white-list-circleci-ip/remove
 
   unit_test_ios:
     executor: macos-executor
@@ -127,6 +133,7 @@ jobs:
   unit_test_android:
     executor: docker-executor
     steps:
+      - aws-white-list-circleci-ip/add
       - install_flutter
       - checkout
       - install_melos
@@ -147,20 +154,29 @@ jobs:
           path: ~/test-results
       - store_artifacts:
           path: ~/test-results/junit
+      - aws-white-list-circleci-ip/remove
 
   publish_unstable:
     executor: publish-executor
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - b5:9f:aa:92:c9:a2:7e:d4:66:ea:dd:ab:66:4e:fe:f4
+      - aws-white-list-circleci-ip/add
       - install_flutter
       - checkout
       - write_oauth_tokens
       - run: gem install bundler
       - run: bundle install
       - run: bundle exec fastlane unstable
+      - aws-white-list-circleci-ip/remove
 
   push_to_release:
     executor: docker-executor
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - b5:9f:aa:92:c9:a2:7e:d4:66:ea:dd:ab:66:4e:fe:f4
       - checkout
       - run: git checkout release && git merge master
       - run: git push origin release
@@ -168,12 +184,17 @@ jobs:
   publish_stable:
     executor: publish-executor
     steps:
+      - add_ssh_keys:
+          fingerprints:
+            - b5:9f:aa:92:c9:a2:7e:d4:66:ea:dd:ab:66:4e:fe:f4
+      - aws-white-list-circleci-ip/add
       - install_flutter
       - checkout
       - write_oauth_tokens
       - run: gem install bundler
       - run: bundle install
       - run: bundle exec fastlane stable
+      - aws-white-list-circleci-ip/remove
 
 releasable_branches: &releasable_branches
   branches:
