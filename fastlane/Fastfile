@@ -159,6 +159,10 @@ private_lane :publish_plugins do
   #   end
   # end
 
+  raise "WARNING: PUB_HOSTED_URL NOT SET" if ENV['PUB_HOSTED_URL'].empty?
+  UI.message("Publishing to ...#{ENV['PUB_HOSTED_URL'].chars.last(6).join} in 3 minutes.")
+  sleep(180)
+
   UI.message('Now actually publishing...')
   Dir.foreach(packages_root) do |plugin|
     next if plugin == '.' or plugin == '..'
