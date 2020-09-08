@@ -83,7 +83,8 @@ jobs:
   unit_test_flutter:
     executor: docker-executor
     steps:
-      - aws-white-list-circleci-ip/add
+      - aws-white-list-circleci-ip/add:
+          port: 4000
       - install_flutter
       - checkout
       - install_melos
@@ -103,7 +104,8 @@ jobs:
           path: ~/test-results
       - store_artifacts:
           path: ~/test-results/junit
-      - aws-white-list-circleci-ip/remove
+      - aws-white-list-circleci-ip/remove:
+          port: 4000
 
   unit_test_ios:
     executor: macos-executor
@@ -133,7 +135,8 @@ jobs:
   unit_test_android:
     executor: docker-executor
     steps:
-      - aws-white-list-circleci-ip/add
+      - aws-white-list-circleci-ip/add:
+          port: 4000
       - install_flutter
       - checkout
       - install_melos
@@ -154,7 +157,8 @@ jobs:
           path: ~/test-results
       - store_artifacts:
           path: ~/test-results/junit
-      - aws-white-list-circleci-ip/remove
+      - aws-white-list-circleci-ip/remove:
+          port: 4000
 
   publish_unstable:
     executor: publish-executor
@@ -162,14 +166,16 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - b5:9f:aa:92:c9:a2:7e:d4:66:ea:dd:ab:66:4e:fe:f4
-      - aws-white-list-circleci-ip/add
+      - aws-white-list-circleci-ip/add:
+          port: 4000
       - install_flutter
       - checkout
       - write_oauth_tokens
       - run: gem install bundler
       - run: bundle install
       - run: bundle exec fastlane unstable
-      - aws-white-list-circleci-ip/remove
+      - aws-white-list-circleci-ip/remove:
+          port: 4000
 
   push_to_release:
     executor: docker-executor
@@ -187,14 +193,16 @@ jobs:
       - add_ssh_keys:
           fingerprints:
             - b5:9f:aa:92:c9:a2:7e:d4:66:ea:dd:ab:66:4e:fe:f4
-      - aws-white-list-circleci-ip/add
+      - aws-white-list-circleci-ip/add:
+          port: 4000
       - install_flutter
       - checkout
       - write_oauth_tokens
       - run: gem install bundler
       - run: bundle install
       - run: bundle exec fastlane stable
-      - aws-white-list-circleci-ip/remove
+      - aws-white-list-circleci-ip/remove:
+          port: 4000
 
 releasable_branches: &releasable_branches
   branches:
