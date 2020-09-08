@@ -1,5 +1,17 @@
 # Changelog
 
+## 0.1.0 (2020-09-08)
+
+### Features
+
+- **amplify_storage_s3**: List, Remove and DownloadFile APIs (#42)
+- **amplify_storage_s3**: UploadFile and GetUrl  APIs (#35)
+
+### Bug Fixes
+
+- **amplify_storage_s3**: upgrade aws-storage-s3 version (#68)
+- **amplify_storage_s3**: fixes dual response from upload (#40)
+
 ## 0.0.1-dev.3 (2020-09-08)
 
 ### Features
