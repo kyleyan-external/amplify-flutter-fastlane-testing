@@ -46,7 +46,7 @@ commands:
           name: Install and set up melos
           command: |
             pub global activate melos
-            ln -s ~/.pub-cache/hosted/pub.kyleyan.io ~/.pub-cache/hosted/pub.dartlang.org
+            ln -s ~/.pub-cache/hosted/http%58%47%47pub.kyleyan.io%584000 ~/.pub-cache/hosted/pub.dartlang.org
             melos bootstrap
 
   write_oauth_tokens:
