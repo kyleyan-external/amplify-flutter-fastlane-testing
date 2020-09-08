@@ -66,6 +66,13 @@ commands:
               "expiration": $OAUTH_EXPIRATION
             }
             EOF
+  reset_pub_url:
+    description:
+      Reset the PUB_HOSTED_URL env var.
+    steps:
+      - run: |
+          echo 'unset PUB_HOSTED_URL' >> $BASH_ENV
+          source $BASH_ENV
 
 jobs:
   format_analyze:
@@ -83,8 +90,7 @@ jobs:
   unit_test_flutter:
     executor: docker-executor
     steps:
-      - aws-white-list-circleci-ip/add:
-          port: 4000
+      - reset_pub_url
       - install_flutter
       - checkout
       - install_melos
@@ -104,8 +110,6 @@ jobs:
           path: ~/test-results
       - store_artifacts:
           path: ~/test-results/junit
-      - aws-white-list-circleci-ip/remove:
-          port: 4000
 
   unit_test_ios:
     executor: macos-executor
@@ -135,8 +139,7 @@ jobs:
   unit_test_android:
     executor: docker-executor
     steps:
-      - aws-white-list-circleci-ip/add:
-          port: 4000
+      - reset_pub_url
       - install_flutter
       - checkout
       - install_melos
@@ -157,8 +160,6 @@ jobs:
           path: ~/test-results
       - store_artifacts:
           path: ~/test-results/junit
-      - aws-white-list-circleci-ip/remove:
-          port: 4000
 
   integ_e2e_test_placeholder:
     executor: docker-executor
