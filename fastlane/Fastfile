@@ -123,7 +123,6 @@ private_lane :prerelease_commit do |options|
   sh('git', 'commit', '-am', commit_message)
 
   # do not push to master, tag is on separate branch
-  sh('git', 'push', 'origin', 'master')
 end
 
 desc 'Commit and push updated release version'
