@@ -160,6 +160,23 @@ jobs:
       - aws-white-list-circleci-ip/remove:
           port: 4000
 
+  integ_e2e_test_placeholder:
+    executor: docker-executor
+    steps:
+      - run: |
+          if [ -z "$AWS_ACCESS_KEY_ID" ]; then
+            echo "No AWS_ACCESS_KEY_ID is set! Failing..."
+            exit 1;
+          else
+            echo "Credentials are available. Continuing..."
+          fi
+      - run: echo "TODO Integration/e2e test placeholder."
+
+  push_fork_to_upstream_branch:
+    executor: docker-executor
+    steps:
+      - run: echo "TODO Push fork to upstream branch to run further testing."
+
   publish_unstable:
     executor: publish-executor
     steps:
@@ -213,13 +230,36 @@ releasable_branches: &releasable_branches
 workflows:
   test_deploy:
     jobs:
-      - unit_test_flutter
-      - unit_test_android
+      - unit_test_flutter:
+          filters:
+            branches:
+              ignore:
+                - release
+      - unit_test_android:
+          filters:
+            branches:
+              ignore:
+                - release
+      - request_further_testing:
+          type: approval
+          filters:
+            branches:
+              only:
+                - /pull\/[0-9]+/
+      - integ_e2e_test_placeholder:
+          filters:
+            branches:
+              ignore:
+                - /pull\/[0-9]+/
+      - push_fork_to_upstream_branch:
+          requires:
+            - request_further_testing
       - request_publish_unstable:
           type: approval
           requires:
             - unit_test_flutter
             - unit_test_android
+            - integ_e2e_test_placeholder
           filters:
             branches:
               only:
@@ -235,9 +275,6 @@ workflows:
           requires:
             - request_publish_stable
       - publish_stable:
-          requires:
-            - unit_test_flutter
-            - unit_test_android
           filters:
             branches:
               only:
