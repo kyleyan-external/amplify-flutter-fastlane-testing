@@ -236,11 +236,13 @@ workflows:
             branches:
               ignore:
                 - release
+                - trigger-integration
       - unit_test_android:
           filters:
             branches:
               ignore:
                 - release
+                - trigger-integration
       - request_further_testing:
           type: approval
           filters:
